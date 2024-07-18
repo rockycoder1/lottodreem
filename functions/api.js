@@ -16,7 +16,7 @@ mongoose.connect(MONGOURL).then(()=> {
 
 const lottoSchema = new mongoose.Schema({
     lottoDate: String,
-    lottoNumbers: []
+    lottoNumbers: String
 });
 
 const LottoModel = mongoose.model("lottoinfo", lottoSchema)
@@ -40,7 +40,7 @@ router.delete('/', (req,res) => {
     res.send('Deleted record')
 })
 
-// console.log('hi', MONGOURL)
+console.log('hi', MONGOURL)
 
 app.use('/.netlify/functions/api', router);
 module.exports.handler = serverless(app)
