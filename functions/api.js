@@ -8,18 +8,28 @@ const router = express.Router()
 dotenv.config()
 const MONGOURL = process.env.MONGO_URL
 
-let testMongo = 'hi'
+
 
 mongoose.connect(MONGOURL).then(()=> {
     console.log('data connected')
-    testMongo = 'this worked'
-    //Get
-    router.get('/', (req, res) => {
-        res.send('App is running...' + testMongo)
-    })
 }).catch((error)=> console.log(error))
 
+const lottoSchema = new mongoose.Schema({
+    lottoDate: String,
+    lottoNumbers: []
+});
 
+const LottoModel = mongoose.model("lottoinfo", lottoSchema)
+
+router.get('/', async(req, res) => {
+    
+    res.send('App is running...')
+})
+
+router.get('/getLottoData', async(req, res) => {
+    const lottoData = await LottoModel.find();
+    res.json(lottoData)
+})
 
 router.post('/add', (req,res) => {
     res.send('New record added')
