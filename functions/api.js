@@ -8,17 +8,18 @@ const router = express.Router()
 dotenv.config()
 const MONGOURL = process.env.MONGO_URL
 
-let testMongo = ''
+let testMongo = 'hi'
 
 mongoose.connect(MONGOURL).then(()=> {
     console.log('data connected')
     testMongo = 'this worked'
+    //Get
+    router.get('/', (req, res) => {
+        res.send('App is running...' + testMongo)
+    })
 }).catch((error)=> console.log(error))
 
-//Get
-router.get('/', (req, res) => {
-    res.send('App is running...' + testMongo)
-})
+
 
 router.post('/add', (req,res) => {
     res.send('New record added')
