@@ -28,19 +28,16 @@ router.get('/getLottoData', async(req, res) => {
     res.json(lottoData)
 })
 
-router.post('/add', (req,res) => {
+router.post('/add', async(req,res) => {
     const lottonumber = new Lottoinfo({
         date: req.body.date,
         numbers: req.body.numbers
     })
 
-    lottonumber.save((err)=>{
-        if(err){
-            res.json({message:err.message, type:'danger'})
-        } else {
-            req.send('number added')
-        }
-    })
+    lottonumber.save().then(()=>{
+        res.send('saved')
+    }).catch((error)=> {console.log(error)})
+
 })
 
 
