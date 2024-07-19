@@ -4,44 +4,43 @@ const app = express()
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const router = express.Router()
+const Lottoinfo = require('../models/lottonumbers')
 
 dotenv.config()
 const MONGOURL = process.env.MONGO_URL
 
-
-
 mongoose.connect(MONGOURL).then(()=> {
     console.log('data connected')
+
+    // const lottoData = Lottoinfo.find().then((data)=> {
+    //     console.log(data)
+    // })
 }).catch((error)=> console.log(error))
 
-const lottoNumberSchema = new mongoose.Schema({
-    date: String,
-    numbers: String
-});
 
-const Lottoinfo = mongoose.model("LottoNumber", lottoNumberSchema)
-
-const getData = async () => {
-    const lottoData = await Lottoinfo.find().then((da)=>{
-        console.log('found',da)
-    }).catch((error)=> console.log(error));
-}
-
-getData()
 
 router.get('/', async(req, res) => {
-    
     res.send('App is running...')
 })
 
 router.get('/getLottoData', async(req, res) => {
     const lottoData = await Lottoinfo.find();
-    console.log(lottoData)
     res.json(lottoData)
 })
 
 router.post('/add', (req,res) => {
-    res.send('New record added')
+    const lottonumber = new Lottoinfo({
+        date: req.body.date,
+        numbers: req.body.numbers
+    })
+
+    lottonumber.save((err)=>{
+        if(err){
+            res.json({message:err.message, type:'danger'})
+        } else {
+            req.send('number added')
+        }
+    })
 })
 
 
