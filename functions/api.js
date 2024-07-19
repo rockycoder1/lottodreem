@@ -28,6 +28,7 @@ router.get('/', async(req, res) => {
 
 router.get('/getLottoData', async(req, res) => {
     const lottoData = await LottoModel.find();
+    console.log(lottoData)
     res.json(lottoData)
 })
 
