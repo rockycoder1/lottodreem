@@ -36,8 +36,8 @@ router.post('/add', (req,res) => {
    
    console.log(req.body)
     const lottonumber = new Lottoinfo({
-        date: req.body.date,
-        numbers: req.body.numbers
+        date: "from node",
+        numbers: "number from node"
     })
 
     lottonumber.save()
