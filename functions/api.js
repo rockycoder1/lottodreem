@@ -6,6 +6,10 @@ const dotenv = require('dotenv')
 const router = express.Router()
 const Lottoinfo = require('../models/lottonumbers')
 
+
+app.use(express.urlencoded({extended:true}))
+app.use(express.json())
+
 dotenv.config()
 const MONGOURL = process.env.MONGO_URL
 
@@ -28,15 +32,17 @@ router.get('/getLottoData', async(req, res) => {
     res.json(lottoData)
 })
 
-router.post('/add', async(req,res) => {
+router.post('/add', (req,res) => {
+   
+   console.log(req.body)
     const lottonumber = new Lottoinfo({
         date: req.body.date,
         numbers: req.body.numbers
     })
 
-    lottonumber.save().then(()=>{
-        res.send('saved')
-    }).catch((error)=> {console.log(error)})
+    lottonumber.save()
+
+    res.send(req.body)    
 
 })
 
@@ -46,4 +52,7 @@ router.delete('/', (req,res) => {
 })
 
 app.use('/.netlify/functions/api', router);
+
+// app.listen(3000, () => console.log('Server running on port 3000!'))
+
 module.exports.handler = serverless(app)
