@@ -6,7 +6,6 @@ const dotenv = require('dotenv')
 const router = express.Router()
 const Lottoinfo = require('../models/lottonumbers')
 
-
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
@@ -15,12 +14,7 @@ const MONGOURL = process.env.MONGO_URL
 
 mongoose.connect(MONGOURL).then(()=> {
     console.log('data connected')
-
-    // const lottoData = Lottoinfo.find().then((data)=> {
-    //     console.log(data)
-    // })
 }).catch((error)=> console.log(error))
-
 
 
 router.get('/', async(req, res) => {
@@ -43,16 +37,16 @@ router.post('/add', (req,res) => {
     lottonumber.save()
 
     res.send(req.body)    
-
 })
-
 
 router.delete('/', (req,res) => {
     res.send('Deleted record')
 })
 
 app.use('/.netlify/functions/api', router);
+app.use('/.netlify/functions/api/register', require('../routes/register'))
+app.use('/.netlify/functions/api/users', require('../routes/users'))
 
-// app.listen(3000, () => console.log('Server running on port 3000!'))
+app.listen(3000, () => console.log('Server running on port 3000!'))
 
 module.exports.handler = serverless(app)
